@@ -1,4 +1,4 @@
-import java.util.Random;
+import java.security.SecureRandom;
 
 public class PasswordGenerator{
     public static String generatePassword(int passwordLength, boolean  useUpper, boolean useLower, boolean useNumber, boolean useSymbol){
@@ -6,7 +6,6 @@ public class PasswordGenerator{
         String character = "";
 
         //  if uppercase selected add uppercase
-        
         if(useUpper) {
             character += "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         }
@@ -24,13 +23,13 @@ public class PasswordGenerator{
         if(useSymbol){
             character += "!@#$%^&*";
         }
-        
+        //  if all the parameter are false
         if(character.isEmpty()){
             return "";
         }
 
         String password = "";
-        Random random = new Random();
+        SecureRandom random = new SecureRandom();
 
         for(int i=0;i<passwordLength;i++){
             int randomIndex = random.nextInt(character.length());
