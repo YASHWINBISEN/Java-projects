@@ -1,0 +1,151 @@
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
+ 
+public class PasswordManager{
+    private ArrayList<PasswordEntry> entries;
+
+    public PasswordManager(){
+        this.entries = new ArrayList<>();
+        loadPassword();
+    }
+
+    private void loadPassword(){
+        File file = new File("password.txt");
+
+        if(file.exists()){
+            try{
+                FileReader read = new FileReader(file);
+                BufferedReader  reader = new BufferedReader(read);
+                String line = reader.readLine();
+
+                while(line != null){
+                    String[] parts = line.split("\\|", -1);
+                    if(parts.length == 3){
+                        try{
+                            PasswordEntry splitted = new PasswordEntry(parts[0], parts[1], parts[2]);
+                            entries.add(splitted);
+                        }
+                        catch(IllegalArgumentException e){
+                            System.out.println("Error: " + e.getMessage());
+                        }
+                    }
+                    else{
+                        System.out.println("Invalid line in password file.");
+                    }
+                    line = reader.readLine();
+                }
+                reader.close();
+
+            }
+            catch(IOException e){
+                System.out.println("Error: " + e.getMessage());
+            }
+        }
+    }
+
+    public void savePasswords(){
+        File file = new File("password.txt");
+        try{
+            FileWriter writer = new FileWriter(file);
+            for(PasswordEntry pass : entries){
+                writer.write(pass.toString());
+                writer.write(System.lineSeparator());
+            }
+            writer.close();
+        }
+        catch(IOException e){
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
+
+    public void addPassword(PasswordEntry entry){
+        for(PasswordEntry existingEntry : entries){
+            if(entry.getWebsite().equalsIgnoreCase(existingEntry.getWebsite())){
+                System.out.println("Website already exists.");
+                return;
+            }
+        }
+        entries.add(entry);
+        System.out.println("Password added successfully.");
+    }
+
+    public void viewPasswords(){
+        if(entries.isEmpty()){
+            System.out.println("No passwords saved yet.");
+            return;
+        }
+        for(PasswordEntry entry : entries){
+            System.out.println(entry.getWebsite());
+            System.out.println(entry.getUsername());
+            System.out.println(entry.getPassword());
+        }
+    }
+
+    public void searchPassword(String website){
+        boolean found = false ;
+        for(PasswordEntry entry : entries){
+            if(website.equalsIgnoreCase(entry.getWebsite())){
+                System.out.println(entry.getWebsite());
+                System.out.println(entry.getUsername());
+                System.out.println(entry.getPassword());
+                found = true;
+            }
+        }
+        if(!found){
+            System.out.println("Password not found !");
+        }
+    }
+
+    public void updatePassword(String website, String newPassword){
+        boolean found = false;
+        for(PasswordEntry entry : entries){
+            if(website.equalsIgnoreCase(entry.getWebsite())){
+                try{
+                    entry.setPassword(newPassword);
+                    System.out.println("Password updated successfully.");
+                }
+                catch(IllegalArgumentException e){
+                    System.out.println("Error: " + e.getMessage());
+                }
+                
+                found = true;
+                break;            }
+        }
+        if(!found){
+            System.out.println("Password not found.");
+        }
+    }
+
+    public void deletePassword(String website){
+        Iterator<PasswordEntry> it = entries.iterator();
+        boolean found = false;
+        while(it.hasNext()){
+            PasswordEntry entry = it.next();
+            
+            if(website.equalsIgnoreCase(entry.getWebsite())){
+                it.remove();
+                System.out.println("Password deleted successfully.");
+                found = true;
+                break;
+            }
+
+        }
+        if(!found){
+            System.out.println("Password not found.");
+        }
+    }
+    
+    public boolean websiteExists(String website){
+        for(PasswordEntry existingEntry : entries){
+            if(website.equalsIgnoreCase(existingEntry.getWebsite())){
+                return true;
+            }
+        }
+        return false;
+    }
+}
