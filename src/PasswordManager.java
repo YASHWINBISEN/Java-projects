@@ -89,7 +89,7 @@ public class PasswordManager{
     public void searchPassword(String website){
         boolean found = false ;
         for(PasswordEntry entry : entries){
-            if(website.equalsIgnoreCase(entry.getWebsite())){
+            if(entry.getWebsite().toLowerCase().contains(website.toLowerCase())){
                 System.out.println(entry.getWebsite());
                 System.out.println(entry.getUsername());
                 System.out.println(entry.getPassword());
