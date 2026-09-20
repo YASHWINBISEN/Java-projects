@@ -66,9 +66,41 @@ public class PasswordManagerGUI {
 
         addButton.addActionListener(e -> {
             String website = JOptionPane.showInputDialog("Enter website name:");
+            if(website == null || website.isBlank()){
+                JOptionPane.showMessageDialog(null, "Website cannot be empty.");
+                return;
+            }
+            if(manager.websiteExists(website)){
+                JOptionPane.showMessageDialog(null, "This website already exists.");
+                return;
+            }
+
             String username = JOptionPane.showInputDialog("Enter username:");
+            if(username == null || username.isBlank()){
+                JOptionPane.showMessageDialog(null, "Username cannot be empty.");
+                return;
+            }
+
             String lengthInput = JOptionPane.showInputDialog("Enter password length (8-16):");
-            int passwordLength = Integer.parseInt(lengthInput);
+            if(lengthInput == null){
+                return;
+            }
+
+            int passwordLength;
+
+            try {
+                passwordLength = Integer.parseInt(lengthInput);
+            }
+            catch(NumberFormatException ex) {
+                JOptionPane.showMessageDialog(null, "Please enter a valid number.");
+                return;
+            }  
+            
+            if(passwordLength < 8 || passwordLength > 16){
+                JOptionPane.showMessageDialog(null, "Password length must be between 8 and 16.");
+                return;
+            }
+
             boolean useUpper = true;
             boolean useLower = true;
             boolean useNumber = true;
@@ -84,17 +116,31 @@ public class PasswordManagerGUI {
 
             PasswordEntry entry = new PasswordEntry(website, username, password);
             manager.addPassword(entry);
-            manager.viewPasswords();
+            manager.savePasswords();
             
             System.out.println("Website: " + website);
             System.out.println("Username: " + username);
             System.out.println("Password Length: " + passwordLength);
             JOptionPane.showMessageDialog(null, "Generated Password: " + password);
         });
-        viewButton.addActionListener(e -> {System.out.println("View Password button clicked.");});
+
+        viewButton.addActionListener(e -> {
+            String passwords = manager.getPasswordsAsText();
+
+            JOptionPane.showMessageDialog(
+                frame,
+                passwords,
+                "Saved Passwords",
+                JOptionPane.INFORMATION_MESSAGE
+            );
+        }); 
+
         searchButton.addActionListener(e -> {System.out.println("Search Password button clicked.");});
+        
         updateButton.addActionListener(e -> {System.out.println("Update Password button clicked.");});
+        
         deleteButton.addActionListener(e -> {System.out.println("Delete Password button clicked.");});
+        
         exitButton.addActionListener(e -> {System.out.println("Exit button clicked.");});
 
         frame.setVisible(true);

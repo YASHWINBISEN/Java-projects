@@ -86,6 +86,24 @@ public class PasswordManager{
         }
     }
 
+    public String getPasswordsAsText(){
+        if(entries.isEmpty()){
+            return "No passwords saved yet.";
+        }
+
+        String result = "";
+
+        for(PasswordEntry entry : entries){
+
+            result += "Website: " + entry.getWebsite() + "\n";
+            result += "Username: " + entry.getUsername() + "\n";
+            result += "Password: " + entry.getPassword() + "\n";
+            result += "-------------------------\n";
+        }
+
+        return result;
+    }
+
     public void searchPassword(String website){
         boolean found = false ;
         for(PasswordEntry entry : entries){
