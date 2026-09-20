@@ -167,9 +167,50 @@ public class PasswordManagerGUI {
                 JOptionPane.INFORMATION_MESSAGE
             );
         });        
-        
-        updateButton.addActionListener(e -> {System.out.println("Update Password button clicked.");});
-        
+
+        updateButton.addActionListener(e -> {
+
+            String website = JOptionPane.showInputDialog(
+                frame,
+                "Enter website whose password you want to update:"
+            );
+
+            if(website == null || website.isBlank()){
+                JOptionPane.showMessageDialog(
+                    frame,
+                    "Website cannot be empty."
+                );
+                return;
+            }
+
+            String newPassword = JOptionPane.showInputDialog(
+                frame,
+                "Enter new password:"
+            );
+
+            if(newPassword == null || newPassword.isBlank()){
+                JOptionPane.showMessageDialog(
+                    frame,
+                    "Password cannot be empty."
+                );
+                return;
+            }
+
+            if(newPassword.length() < 8 || newPassword.length() > 16){
+                JOptionPane.showMessageDialog(
+                    frame,
+                    "Password length must be between 8 and 16."
+                );
+                return;
+            }
+
+            manager.updatePassword(website, newPassword);
+            manager.savePasswords();
+
+            System.out.println("Website to update: " + website);
+            System.out.println("New password: " + newPassword);
+        });   
+             
         deleteButton.addActionListener(e -> {System.out.println("Delete Password button clicked.");});
         
         exitButton.addActionListener(e -> {System.out.println("Exit button clicked.");});
