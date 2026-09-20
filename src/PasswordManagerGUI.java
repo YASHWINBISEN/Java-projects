@@ -7,6 +7,8 @@ import javax.swing.BoxLayout;
 import java.awt.Dimension;
 import javax.swing.Box;
 import javax.swing.JOptionPane;
+import javax.swing.JTextArea;
+import javax.swing.JScrollPane;
 
 
 public class PasswordManagerGUI {
@@ -125,11 +127,17 @@ public class PasswordManagerGUI {
         });
 
         viewButton.addActionListener(e -> {
+
             String passwords = manager.getPasswordsAsText();
+
+            JTextArea textArea = new JTextArea(passwords, 15, 40);
+            textArea.setEditable(false);
+
+            JScrollPane scrollPane = new JScrollPane(textArea);
 
             JOptionPane.showMessageDialog(
                 frame,
-                passwords,
+                scrollPane,
                 "Saved Passwords",
                 JOptionPane.INFORMATION_MESSAGE
             );
