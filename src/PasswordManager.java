@@ -63,15 +63,17 @@ public class PasswordManager{
         }
     }
 
-    public void addPassword(PasswordEntry entry){
+    public boolean addPassword(PasswordEntry entry){
+
         for(PasswordEntry existingEntry : entries){
+
             if(entry.getWebsite().equalsIgnoreCase(existingEntry.getWebsite())){
-                System.out.println("Website already exists.");
-                return;
+                return false;
             }
         }
+
         entries.add(entry);
-        System.out.println("Password added successfully.");
+        return true;
     }
 
     public void viewPasswords(){
@@ -141,43 +143,41 @@ public class PasswordManager{
         return result;
     }
 
-    public void updatePassword(String website, String newPassword){
-        boolean found = false;
+    public boolean updatePassword(String website, String newPassword){
+
         for(PasswordEntry entry : entries){
+
             if(website.equalsIgnoreCase(entry.getWebsite())){
+
                 try{
                     entry.setPassword(newPassword);
-                    System.out.println("Password updated successfully.");
+                    return true;
                 }
                 catch(IllegalArgumentException e){
-                    System.out.println("Error: " + e.getMessage());
+                    return false;
                 }
-                
-                found = true;
-                break;            }
+            }
         }
-        if(!found){
-            System.out.println("Password not found.");
-        }
+
+        return false;
     }
 
-    public void deletePassword(String website){
-        Iterator<PasswordEntry> it = entries.iterator();
-        boolean found = false;
-        while(it.hasNext()){
-            PasswordEntry entry = it.next();
-            
-            if(website.equalsIgnoreCase(entry.getWebsite())){
-                it.remove();
-                System.out.println("Password deleted successfully.");
-                found = true;
-                break;
-            }
+    public boolean deletePassword(String website){
 
+        Iterator<PasswordEntry> it = entries.iterator();
+
+        while(it.hasNext()){
+
+            PasswordEntry entry = it.next();
+
+            if(website.equalsIgnoreCase(entry.getWebsite())){
+
+                it.remove();
+                return true;
+            }
         }
-        if(!found){
-            System.out.println("Password not found.");
-        }
+
+        return false;
     }
     
     public boolean websiteExists(String website){
