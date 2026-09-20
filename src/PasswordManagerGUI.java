@@ -211,8 +211,38 @@ public class PasswordManagerGUI {
             System.out.println("New password: " + newPassword);
         });   
              
-        deleteButton.addActionListener(e -> {System.out.println("Delete Password button clicked.");});
-        
+        deleteButton.addActionListener(e -> {
+
+            String website = JOptionPane.showInputDialog(
+                frame,
+                "Enter website you want to delete:"
+            );
+
+            if(website == null || website.isBlank()){
+                JOptionPane.showMessageDialog(
+                    frame,
+                    "Website cannot be empty."
+                );
+                return;
+            }
+
+            int choice = JOptionPane.showConfirmDialog(
+                frame,
+                "Are you sure you want to delete this password?",
+                "Confirm Delete",
+                JOptionPane.YES_NO_OPTION
+            );
+
+            if(choice != JOptionPane.YES_OPTION){
+                return;
+            }
+            
+            manager.deletePassword(website);
+            manager.savePasswords();
+            
+            System.out.println("Website to delete: " + website);
+        });
+
         exitButton.addActionListener(e -> {System.out.println("Exit button clicked.");});
 
         frame.setVisible(true);
