@@ -141,9 +141,32 @@ public class PasswordManagerGUI {
                 "Saved Passwords",
                 JOptionPane.INFORMATION_MESSAGE
             );
-        }); 
+        });
 
-        searchButton.addActionListener(e -> {System.out.println("Search Password button clicked.");});
+        searchButton.addActionListener(e -> {
+
+            String website = JOptionPane.showInputDialog(
+                frame,
+                "Enter website to search:"
+            );
+
+            if(website == null || website.isBlank()){
+                JOptionPane.showMessageDialog(
+                    frame,
+                    "Website cannot be empty."
+                );
+                return;
+            }
+
+            String result = manager.searchPasswordsAsText(website);
+
+            JOptionPane.showMessageDialog(
+                frame,
+                result,
+                "Search Results",
+                JOptionPane.INFORMATION_MESSAGE
+            );
+        });        
         
         updateButton.addActionListener(e -> {System.out.println("Update Password button clicked.");});
         

@@ -119,6 +119,28 @@ public class PasswordManager{
         }
     }
 
+    public String searchPasswordsAsText(String website){
+
+        String result = "";
+
+        for(PasswordEntry entry : entries){
+
+            if(entry.getWebsite().toLowerCase().contains(website.toLowerCase())){
+
+                result += "Website: " + entry.getWebsite() + "\n";
+                result += "Username: " + entry.getUsername() + "\n";
+                result += "Password: " + entry.getPassword() + "\n";
+                result += "-------------------------\n";
+            }
+        }
+
+        if(result.isEmpty()){
+            return "Password not found!";
+        }
+
+        return result;
+    }
+
     public void updatePassword(String website, String newPassword){
         boolean found = false;
         for(PasswordEntry entry : entries){
