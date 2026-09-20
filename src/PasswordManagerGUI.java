@@ -239,14 +239,24 @@ public class PasswordManagerGUI {
             
             manager.deletePassword(website);
             manager.savePasswords();
-            
+
             System.out.println("Website to delete: " + website);
         });
 
-        exitButton.addActionListener(e -> {System.out.println("Exit button clicked.");});
+        exitButton.addActionListener(e -> {
+            int choice = JOptionPane.showConfirmDialog(
+                frame,
+                "Are you sure you want to exit?",
+                "Exit",
+                JOptionPane.YES_NO_OPTION
+            );
+
+            if(choice == JOptionPane.YES_OPTION){
+                frame.dispose();
+            }
+        });
 
         frame.setVisible(true);
         
-
     }
 }
